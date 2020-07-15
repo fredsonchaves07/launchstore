@@ -36,7 +36,8 @@
         <input type="text" 
                name="price" 
                placeholder="Digite o preço do produto"
-               value="{{product.price}}">
+               value="{{product.price}}"
+               onkeydown="Mask.apply(this, 'formatBRL')">
     </div>
     {% if product.od_price %}
         <input type="hidden" name="old_price" value="{{product.old_price}}">

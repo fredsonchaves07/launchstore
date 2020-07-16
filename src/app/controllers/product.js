@@ -1,5 +1,6 @@
 const Category = require('../models/Category')
 const Product = require('../models/Product')
+const utils = require('../lib/utils')
 
 module.exports = {
     create(req, res){
@@ -22,13 +23,25 @@ module.exports = {
                 return res.send('Fill al fields!')
             }
         }
+        const results = await Product.create(req.body)
+        const productId = results.rows[0].id
 
-        let results = await Product.create(req.body)
+        return res.redirect(`/products/${productId}`, {categories, product})
+    },
+
+    async edit(req, res){
+        let results = await Product.find(req.params.id)
         const product = results.rows[0]
+
+        if(!product){
+            return res.send('Product not found!')
+        }
 
         results = await Category.all()
         const categories = results.rows
+        
+        product.price = utils.formatPrice(product.price)
 
-        return res.render('products/create.njk', {categories, product})
+        return res.render('products/edit.njk', {product, categories})
     }
 }

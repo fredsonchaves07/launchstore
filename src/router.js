@@ -12,6 +12,7 @@ routes.get('/ads/create', (req, res) => {
 
 
 routes.get('/products/create', products.create)
+routes.get('/products/:id/edit', products.edit)
 
 routes.post('/products', products.post)
 

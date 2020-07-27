@@ -15,5 +15,7 @@ routes.get('/products/create', products.create)
 routes.get('/products/:id/edit', products.edit)
 
 routes.post('/products', products.post)
+routes.put('/products', products.put)
+routes.delete('/products', products.delete)
 
 module.exports = routes

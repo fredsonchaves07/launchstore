@@ -29,6 +29,25 @@
 </div>
 
 <div class="item">
+    <div>Fotos</div>
+    <div>
+        <div id="photos-upload">
+                    <input 
+                    type="file" 
+                    name="photos" 
+                    id="photos-input" 
+                    multiple
+                    accept="image/*"
+                    onchange = "PhotosUpload.handleFileInput(event)">
+                    <p>Selecione até 6 fotos</p>
+        </div>
+        <div id="photos-preview">
+
+        </div>
+    </div>
+</div>
+
+<div class="item">
     <div>Valor</div>
     <div>
         <input type="text" 
@@ -51,7 +70,7 @@
                value="{{product.quantity}}">
     </div>
 </div>
-{% if product.status %}
+{% if product.status != null %}
 <div class="item">
     <div>Disponível</div>
     <div>
@@ -73,8 +92,6 @@
         </span>
     </div>
 </div>
-
-
 
 {% endif %}
 

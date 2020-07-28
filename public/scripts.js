@@ -22,16 +22,21 @@ const Mask = {
 }
 
 const PhotosUpload = {
+    input : "",
     preview: document.querySelector('#photos-preview'),
     uploadLimit: 6,
+    files:[],
     handleFileInput(event){
         const {files: filesList} = event.target
+        PhotosUpload.input = event.target
         
         if(PhotosUpload.hasLimit(event)){
             return
         }
 
         Array.from(filesList).forEach(file => {
+            PhotosUpload.files.push(file)
+
             const reader = new FileReader()
 
             reader.onload = () => {
@@ -46,6 +51,8 @@ const PhotosUpload = {
 
             reader.readAsDataURL(file)
         })
+
+        PhotosUpload.input.files = PhotosUpload.getAllFiles()
     },
 
     getContainer(image){
@@ -62,8 +69,8 @@ const PhotosUpload = {
     },
 
     hasLimit(event){
-        const {uploadLimit} = PhotosUpload
-        const {files: fileList} = event.target
+        const {uploadLimit, preview} = PhotosUpload
+        const {files: fileList} = PhotosUpload.input
 
         if(fileList.length > uploadLimit){
             alert(`Envie no máximo ${uploadLimit} fotos`)
@@ -71,7 +78,32 @@ const PhotosUpload = {
             return true
         }
 
+        const photosDiv = []
+
+        preview.childNodes.forEach(item => {
+            if(item.classList && item.classList.value == 'photo'){
+                photosDiv.push(item)
+            }
+        })
+
+        const totalPhotos = fileList.length + photosDiv.length
+
+        if(totalPhotos > uploadLimit){
+            alert('Você atingiu o limite máximo de photos')
+            event.prevendDefault
+            return true
+        }
+
         return false
+    },
+
+    getAllFiles(){
+        /*const dataTransfer =  new ClipboardEvent("").clipboardData  -> firefox */
+        const dataTransfer = new DataTransfer()
+
+        PhotosUpload.files.forEach(file => dataTransfer.items.add(file))
+
+        return dataTransfer.files
     },
 
     getRemoveButton(){
@@ -86,6 +118,9 @@ const PhotosUpload = {
 
         const photosArray = Array.from(PhotosUpload.preview.children)
         const index = photosArray.indexOf(photoDiv)
+
+        PhotosUpload.files.splice(index, 1)
+        PhotosUpload.input.files = PhotosUpload.getAllFiles()
 
         photoDiv.remove()
     }

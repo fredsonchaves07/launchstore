@@ -1,5 +1,6 @@
 const Category = require('../models/Category')
 const Product = require('../models/Product')
+const File = require('../models/File')
 const utils = require('../lib/utils')
 
 module.exports = {
@@ -23,10 +24,23 @@ module.exports = {
                 return res.send('Fill al fields!')
             }
         }
+
+        if(req.files.length == 0){
+            return res.send('Please, send at least one image')
+        }
+
+
         const results = await Product.create(req.body)
         const productId = results.rows[0].id
 
-        return res.redirect(`/products/${productId}`, {categories, product})
+        const filesPromise = req.files.map(file => File.create({
+            ...file,
+            product_id: productId
+        }))
+
+        await Promise.all(filesPromise)
+
+        return res.redirect(`/products/${productId}/edit`, {product})
     },
 
     async edit(req, res){

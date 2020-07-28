@@ -1,7 +1,7 @@
 {% extends 'layout.njk' %}
 {% block content %}
 <section class="container form">
-    <form action="/products?_method=PUT" method="POST">
+    <form action="/products?_method=PUT" method="POST" enctype="multipart/form-data">
         <div class="header">
             <h3>Editar Produto</h3>
         </div>
@@ -13,7 +13,7 @@
         <button class="button edit" type="submit">Salvar</button>
     </form>
 
-    <form action="/products?_method=DELETE" method="POST" id="delete">
+    <form action="/products?_method=DELETE" method="POST" id="delete" enctype="multipart/form-data">
         <input type="hidden" name="id" value="{{product.id}}">
         <button class="button delete" type="submit" >Deletar</button>
     </form>

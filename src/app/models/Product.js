@@ -1,4 +1,5 @@
 const db = require('../config/db')
+const search = require('../controllers/search')
 
 module.exports = {
     all(){
@@ -89,5 +90,33 @@ module.exports = {
         return db.query(`
             SELECT * FROM files WHERE product_id = ${id}
         `)
+    },
+
+    search(params){
+        const {filter, category} = params
+
+        let query = '',
+            filterQuery = `WHERE`
+        
+        if(category){
+            filterQuery = `${filterQuery}
+            products.category_id = ${category_id}
+            AND
+            `
+        }
+
+        filterQuery = `
+            ${filterQuery}
+            products.name ilike '%${filter}%'
+            OR products.description ilike '%${filter}%'
+        `
+        query = `
+            SELECT products.*, categories.name AS category_name
+            FROM produts
+            LEFT JOIN categories ON categories.id = products.category_id
+            ${filterQuery}
+        `
+
+        return db.query(query)
     }
 }

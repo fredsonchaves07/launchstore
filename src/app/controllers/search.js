@@ -4,32 +4,56 @@ const { formatPrice } = require('../lib/utils')
 
 module.exports = {
     async index(req, res){
-        let results = await Product.all()
-        const products = results.rows
+        try {
+            let results,
+                params = {}
 
-        if(!products){
-            return res.send('Products not found')
-        }
+            const {filter, category} = req.query
 
-        async function getImage(productId){
-            let results = await Product.files(productId)
-            const files = results.rows.map(file => {
-                return `${req.protocol}://${req.header.host}${file.path.replace('public', '')}`
+            if(!filter){
+                return res.redirect('/')
+            }
+
+            params.filter = filter
+
+            if(category){
+                params.category = category
+            }
+
+            results = await Product.search(params)
+
+            async function getImage(productId){
+                let results = await Product.files(productId)
+                const files = results.rows.map(file => {
+                    return `${req.protocol}://${req.header.host}${file.path.replace('public', '')}`
+                })
+    
+                return files[0]
+            }
+
+            const productsPromise = results.rows.map(async product => {
+                product.img = await getImage(product.id)
+                product.price = formatPrice(product.old_price)
+                product.price = formatPrice(product.price)
+
+                return product
             })
 
-            return files[0]
+            const products = await Promise.all(productsPromise)
+
+            const search = {
+                term: req.query.filter,
+                total: products.length
+            }
+
+            const categories = products.map(product => ({
+                id: product.category_id,
+                name: product.category_name
+            }))
+
+            return res.render('search/index', {products, search, categories})
+        } catch (error) {
+            console.log(error)
         }
-
-        const productPromise = products.map(async product => {
-            product.img = await getImage(product.id)
-            product.price = formatPrice(product.old_price)
-            product.price = formatPrice(product.price)
-            
-            return product
-        }).filter((product, index) => index > 2 ? false: true)
-
-        const lastAdded = await Promise.all(productPromise)
-
-        return res.render('search/index', {product: lastAdded})
     }
 }

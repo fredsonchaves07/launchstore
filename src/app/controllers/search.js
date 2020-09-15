@@ -49,7 +49,15 @@ module.exports = {
             const categories = products.map(product => ({
                 id: product.category_id,
                 name: product.category_name
-            }))
+            })).reduce((categoriesFiltered, product) => {
+                const found = categoriesFiltered.some(category => category.id == product.id)
+
+                if(!found){
+                    categoriesFiltered.push(category)
+                }
+
+                return categoriesFiltered
+            }, [])
 
             return res.render('search/index', {products, search, categories})
         } catch (error) {

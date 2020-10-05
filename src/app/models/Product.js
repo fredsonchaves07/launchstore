@@ -19,7 +19,7 @@ module.exports = {
                 old_price,
                 price,
                 quantity,
-                status
+                status 
             ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
             RETURNING id
         `

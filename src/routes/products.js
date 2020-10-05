@@ -9,8 +9,8 @@ const search = require('../app/controllers/search')
 routes.get('/search', search.index)
 
 //Products
-routes.get('/:id', products.show)
 routes.get('/create', products.create)
+routes.get('/:id', products.show)
 routes.get('/:id/edit', products.edit)
 
 routes.post('/', multer.array("photos", 6), products.post)

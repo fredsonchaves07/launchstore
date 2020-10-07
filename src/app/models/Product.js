@@ -1,5 +1,5 @@
 const db = require('../config/db')
-const search = require('../controllers/search')
+const search = require('../controllers/SearchController')
 
 module.exports = {
     all(){

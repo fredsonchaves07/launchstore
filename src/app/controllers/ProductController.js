@@ -32,7 +32,7 @@ module.exports = {
 
 
         const results = await Product.create(req.body)
-        const productId = results.body.id
+        const productId = req.body.id
 
         const filesPromise = req.files.map(file => File.create({
             ...file,

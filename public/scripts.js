@@ -22,154 +22,87 @@ const Mask = {
 }
 
 const PhotosUpload = {
-    input : "",
     preview: document.querySelector('#photos-preview'),
     uploadLimit: 6,
-    files:[],
+
     handleFileInput(event){
-        const {files: filesList} = event.target
-        PhotosUpload.input = event.target
+        const {files: fileList} = event.target
         
-        if(PhotosUpload.hasLimit(event)){
-            return
+        // Verifica se possui tem algum limite no envio de foto
+        if(PhotosUpload.hasLimit(event)) {
+            return 
         }
 
-        Array.from(filesList).forEach(file => {
-            PhotosUpload.files.push(file)
-
+        Array.from(fileList).forEach(file => {
+            // Ler o arquivo e transforma para o padão BTU
             const reader = new FileReader()
 
             reader.onload = () => {
+                //Cria a imagem
                 const image = new Image()
                 image.src = String(reader.result)
 
-
                 const div = PhotosUpload.getContainer(image)
+
+                // Adiciona a div na div de previsualização de fotos
                 PhotosUpload.preview.appendChild(div)
-                
+
             }
 
+            // Quando tiver carregado será executado o onload
             reader.readAsDataURL(file)
         })
-
-        PhotosUpload.input.files = PhotosUpload.getAllFiles()
     },
 
-    getContainer(image){
-        const div = document.createElement('div')
-        div.classList.add('photo')
-        
-        div.onclick = PhotosUpload.removePhoto
-
-        div.appendChild(image)
-
-        div.appendChild(PhotosUpload.getRemoveButton())
-
-        return div
-    },
-
+    // Função que verifica se possui alguma limitação no envio de imagens
     hasLimit(event){
-        const {uploadLimit, preview} = PhotosUpload
-        const {files: fileList} = PhotosUpload.input
+        const {uploadLimit} = PhotosUpload
+        const {files : fileList} = event.target
 
         if(fileList.length > uploadLimit){
             alert(`Envie no máximo ${uploadLimit} fotos`)
-            event.prevendDefault()
-            return true
-        }
-
-        const photosDiv = []
-
-        preview.childNodes.forEach(item => {
-            if(item.classList && item.classList.value == 'photo'){
-                photosDiv.push(item)
-            }
-        })
-
-        const totalPhotos = fileList.length + photosDiv.length
-
-        if(totalPhotos > uploadLimit){
-            alert('Você atingiu o limite máximo de photos')
-            event.prevendDefault
+            //Bloqueia o envio. Tornando o comportamento padrão
+            event.preventDefault()
             return true
         }
 
         return false
     },
 
-    getAllFiles(){
-        /*const dataTransfer =  new ClipboardEvent("").clipboardData  -> firefox */
-        const dataTransfer = new DataTransfer()
+    // Trata um div container photo
+    getContainer(image){
+        const div = document.createElement('div')
 
-        PhotosUpload.files.forEach(file => dataTransfer.items.add(file))
+        div.classList.add('photo')
+        // Aplica o evento de click para remover a foto
+        div.onclick = PhotosUpload.removePhoto
+        // Adiciona o botão de fechar
+        div.appendChild(PhotosUpload.getRemoveButton())
+        // Adiciona a imagem criada na div de imagem
+        div.appendChild(image)
 
-        return dataTransfer.files
+        return div
     },
 
+    // Recebe o botão para excluir a foto
     getRemoveButton(){
         const button = document.createElement('i')
         button.classList.add('material-icons')
         button.innerHTML = 'close'
+
         return button
+
     },
 
+    // Função que remove foto
     removePhoto(event){
+        // Div de classe Photo
         const photoDiv = event.target.parentNode
-
-        const photosArray = Array.from(PhotosUpload.preview.children)
-        const index = photosArray.indexOf(photoDiv)
-
-        PhotosUpload.files.splice(index, 1)
-        PhotosUpload.input.files = PhotosUpload.getAllFiles()
+        const photoArray = Array.from(PhotosUpload.preview.children)
+        const index = photoArray.indexOf(photoDiv)
 
         photoDiv.remove()
-    },
 
-    removeOldPhoto(event){
-        const photoDiv = event.target.parentNode
-
-        if(photoDiv.id){
-            const removedFiles = document.querySelector('input[name="removed_files"]')
-
-            if(removedFiles){
-                removedFiles.value += `${photoDiv.id},`
-            }
-        }
-
-        photoDiv.remove()
     }
 }
 
-const ImageGallery = {
-    highight: document.querySelector('.gallery .highlight > img'),
-    previews: document.querySelectorAll('gallery-preview img'),
-    setImage(e){
-        const {target} = event
-
-        this.previews.forEach(preview => preview.classList.remove('active'))
-        
-        target.classList.add('active')
-
-        this.highight.src = target.src
-        Lightbox.image.src = target.src
-    }
-}
-
-const Lightbox = {
-    target: document.querySelector('.lightbox-target'),
-    image: document.querySelector('.lightbox-target img'),
-    closeButton: document.querySelector('.lightbox-target a.lightbox-close'),
-    open() {
-        this.target.style.opacity = 1
-        this.target.style.top = 0
-        this.target.style.bottom = 0
-        this.closeButton.style.top = 0
-    },
-
-    close(){
-        this.target.setTimeout.opacity = 0
-        this.target.style.top = '-100%'
-        this.target.style.bottom = 'initial'
-        this.closeButton.style.top = '-80px'
-    }
-}

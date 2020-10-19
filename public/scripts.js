@@ -24,16 +24,22 @@ const Mask = {
 const PhotosUpload = {
     preview: document.querySelector('#photos-preview'),
     uploadLimit: 6,
+    files: [],
+    input: "",
 
     handleFileInput(event){
         const {files: fileList} = event.target
-        
+        PhotosUpload.input = event.target
+
         // Verifica se possui tem algum limite no envio de foto
         if(PhotosUpload.hasLimit(event)) {
             return 
         }
 
         Array.from(fileList).forEach(file => {
+            // Colocando arquivos dentro para tratar casos de atualização de imagens
+            PhotosUpload.files.push(file)
+
             // Ler o arquivo e transforma para o padão BTU
             const reader = new FileReader()
 
@@ -52,12 +58,25 @@ const PhotosUpload = {
             // Quando tiver carregado será executado o onload
             reader.readAsDataURL(file)
         })
+        
+        // Substitui o fileList padrão do navegador por um fileList manipulável
+        PhotosUpload.input.files = PhotosUpload.getAllFiles()
+    },
+
+    // Função que retorna todos os FileList
+    getAllFiles(){
+        // Cria um data transfer que transforma o array em um tipo FileList
+        const dataTransfer = new DataTransfer() || new  ClipboardEvent('') 
+
+        PhotosUpload.files.forEach(file => dataTransfer.items.add(file))
+
+        return dataTransfer.files
     },
 
     // Função que verifica se possui alguma limitação no envio de imagens
     hasLimit(event){
-        const {uploadLimit} = PhotosUpload
-        const {files : fileList} = event.target
+        const {uploadLimit, input, preview} = PhotosUpload
+        const {files: fileList} = input
 
         if(fileList.length > uploadLimit){
             alert(`Envie no máximo ${uploadLimit} fotos`)
@@ -65,6 +84,25 @@ const PhotosUpload = {
             event.preventDefault()
             return true
         }
+
+        // Lógica de identificação da quantidade de fotos
+        const photosDiv = []
+
+        // Pecorre as fotos que estão na previsualização de imagens
+        preview.childNodes.forEach(item => {
+            if(item.classList && item.classList.value == 'photo'){
+                photosDiv.push(item)
+            }
+        })
+
+        const totalPhotos = fileList.length + photosDiv.length
+
+        if(totalPhotos > uploadLimit){
+            alert("Atingiu o limite de fotos")
+            event.preventDefault()
+            return true
+        }
+        
 
         return false
     },
@@ -101,6 +139,9 @@ const PhotosUpload = {
         const photoArray = Array.from(PhotosUpload.preview.children)
         const index = photoArray.indexOf(photoDiv)
 
+        PhotosUpload.files.splice(index, 1)
+        PhotosUpload.input.files = PhotosUpload.getAllFiles()
+        
         photoDiv.remove()
 
     }

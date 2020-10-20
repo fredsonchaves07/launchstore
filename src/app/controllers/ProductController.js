@@ -79,6 +79,7 @@ module.exports = {
 
             await Promise.all(newFilePromise)
         }
+        
         if(req.body.removed_files){
             const removedFiles = req.body.removed_files.split(',')
             const lastIndex = removedFiles.length - 1

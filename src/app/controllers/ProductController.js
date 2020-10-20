@@ -26,45 +26,47 @@ module.exports = {
             }
         }
 
+        // Verifica se arquivo está vazio  
         if(req.files.length == 0){
             return res.send('Please, send at least one image')
         }
 
+        let results = await Product.create(req.body)
+        const productId =results.rows[0].id
 
-        const results = await Product.create(req.body)
-        const productId = req.body.id
+        // Criando um array de promessas pois o for each não ler a promessa
+        const filePromise = req.files.map(file => File.create({...file, product_id: productId}))
+        await Promise.all(filePromise)
 
-        const filesPromise = req.files.map(file => File.create({
-            ...file,
-            product_id: productId
-        }))
-
-        await Promise.all(filesPromise)
-
-        return res.redirect(`/products/${productId}/edit`, {product})
+        return res.redirect(`/products/${productId}`)
     },
 
     async edit(req, res){
         let results = await Product.find(req.params.id)
         const product = results.rows[0]
 
-        if(!product){
+        if(!product) {
             return res.send('Product not found!')
         }
 
-        product.price = utils.formatPrice(product.price)
-        
-        //get category
+        product.old_price = formatPrice(product.old_price)
+        product.price = formatPrice(product.price)
+
         results = await Category.all()
         const categories = results.rows
-        
+
+        // Recebendo a imagem
         results = await Product.files(product.id)
         let files = results.rows
 
-        files = files.map(file => ({ 
+        // Atualizando colocando o endereço correto onde está a imagem
+        files = files.map(file => ({
             ...file,
-            src: `${req.protocol}://${req.headers.host}${file.path.replace('public', '')}`
+            src: `${req.protocol}://${req.header.host}${file.path.replace('public', '')}`
         }))
+
+        
+
 
         return res.render('products/edit.njk', {product, categories, files})
     },

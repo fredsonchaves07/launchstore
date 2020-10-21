@@ -6,7 +6,7 @@
                 {% if not files[0] %}
                 <img src="http://placehold.it/500x500?text=PRODUTO" alt="">
                 {% else %}
-                <img src="{{files[0]}}" alt="{{files[0].name}}" onclick="Lightbox.open()">
+                <img src="{{files[0].src}}" alt="{{files[0].name}}" onclick="Lightbox.open()">
                 {% endif %}
                 <div class="lightbox-target">
                     <img src="{{files[0].src}}" alt="{{files[0].name}}">
@@ -22,7 +22,7 @@
                          {% if loop.index0 == 0 %}
                             class="active"
                          {% endif %}
-                         onclick="imageGallery.setImage(event)">
+                         onclick="ImageGallery.setImage(event)">
                          
                 {% endfor %}
             </div>

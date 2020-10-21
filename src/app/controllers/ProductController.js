@@ -124,7 +124,6 @@ module.exports = {
 
     async show(req, res){
         /*TODO: Implementar data e hora no cadastro */
-
         let results = await Product.find(req.params.id)
         const product = results.rows[0]
 
@@ -135,6 +134,7 @@ module.exports = {
         product.oldPrice = formatPrice(product.old_price)
         product.price = formatPrice(product.price)
 
+        // Chama as imagens 
         results = await Product.files(product.id)
         const files = results.rows.map(file => ({
             ...file,

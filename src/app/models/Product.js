@@ -95,8 +95,7 @@ module.exports = {
     search(params){
         const {filter, category} = params
 
-        let query = '',
-            filterQuery = `WHERE`
+        let query = '', filterQuery = `WHERE`
         
         if(category){
             filterQuery = `${filterQuery}

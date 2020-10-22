@@ -14,7 +14,7 @@ module.exports = {
         async function getImage(productId){
             let results = await Product.files(productId)
             const files = results.rows.map(file => {
-                return `${req.protocol}://${req.header.host}${file.path.replace('public', '')}`
+                return `${req.protocol}://${req.headers.host}${file.path.replace('public', '')}`
             })
 
             return files[0]
@@ -30,6 +30,6 @@ module.exports = {
 
         const lastAdded = await Promise.all(productPromise)
 
-        return res.render('home/index', {product: lastAdded})
+        return res.render('home/index', {products: lastAdded})
     }
 }

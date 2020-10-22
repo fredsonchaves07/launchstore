@@ -5,8 +5,7 @@ const { formatPrice } = require('../lib/utils')
 module.exports = {
     async index(req, res){
         try {
-            let results,
-                params = {}
+            let results, params = {}
 
             const {filter, category} = req.query
 

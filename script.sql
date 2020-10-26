@@ -1,5 +1,4 @@
 drop  database if exists launchstoredb;
-
 create database launchstoredb;
 
 CREATE TABLE products(

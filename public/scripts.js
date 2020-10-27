@@ -51,16 +51,70 @@ const Mask = {
 
 const Validate = {
     apply(input, func){
+        Validate.clearError(input)
+
         let results = Validate[func](input.value)
         input.value = results.value
 
         if(results.error){
-            alert('Errou!!')
+            Validate.displayError(input, results.error)
         }
+    },
+
+    clearError(input){
+        const errorDiv = input.parentNode.querySelector('.error')
+
+        if(errorDiv){
+            errorDiv.remove()
+        }
+    },
+
+    displayError(input, error){
+        const div = document.createElement('div')
+        div.classList.add('error')
+        div.innerHTML = error
+        input.parentNode.appendChild(div)
+        input.focus()
     },
 
     isEmail(value) {
         let error = null
+        const mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+
+        if(!value.match(mailFormat)){
+            error = 'Email inválido'
+        }
+
+        return {
+            error,
+            value
+        }
+    },
+
+    isCpfCnpj(value){
+        let error = null
+        const clearValues = value.replace(/\D/g, '')
+
+        if(clearValues.length > 11 && clearValues.length != '14'){
+            error ='CNPJ incorreto'
+        } else if(clearValues.length < 12 && clearValues.length != 11){
+            error = 'CPF incorreto'
+        }
+
+        return {
+            error,
+            value
+        }
+    },
+
+    isCep(value){
+        let error = null
+        const clearValues = value.replace(/\D/g, '')
+
+        if(clearValues.length != 8){
+            error ='CEP incorreto'
+        }
+
         return {
             error,
             value

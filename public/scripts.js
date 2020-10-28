@@ -38,7 +38,7 @@ const Mask = {
     },
 
     cep(value){
-        if(value.length > 8){
+        if(value.length > 9){
             value = value.slice(0, -1)
         }
 

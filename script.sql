@@ -36,7 +36,7 @@ CREATE TABLE users(
     name text not null,
     email text unique not null,
     password text not null,
-    cpf_cnpj int unique not null,
+    cpf_cnpj text unique not null,
     cep text,
     address text,
     created_at date default(now()),

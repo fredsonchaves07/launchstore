@@ -6,6 +6,12 @@ module.exports = {
     },
 
     async post(req, res){
-        return res.send('Passou!')
+        const userId = await User.create(req.body)
+
+        return res.redirect('users/')
+    },
+
+    show(req, res){
+        return res.send('Cadastrado')
     }
 }

@@ -1,4 +1,7 @@
 const db = require('../config/db')
+const {hash} = require('bcryptjs')
+// Biblioteca utilizada para realizar o encript de senha
+const { has } = require('browser-sync')
 
 module.exports = {
     async findUser(data){
@@ -24,4 +27,32 @@ module.exports = {
 
         return email || cpf_cnpj
     },
+
+    async create(data){
+        const query = `
+            INSERT INTO users (
+                name,
+                email,
+                password,
+                cpf_cnpj,
+                cep,
+                address
+            ) VALUES ($1, $2, $3, $4, $5, $6)
+        `
+
+        // Criptografia de senha
+        const passwordHash = await hash(data.password, 8)
+    
+        const values = [
+            data.name,
+            data.email,
+            passwordHash,
+            data.cpf_cnpj.replace(/\D/g, ""),
+            data.cep.replcace(/\D/g, ""),
+            data.address
+        ]
+
+        const results = await db.query(query, values)
+        return results.rows[0].id
+    }
 }

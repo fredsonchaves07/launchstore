@@ -6,7 +6,10 @@ async function post(req, res, next){
 
     for(key of keys){
         if(req.body[key] == ''){
-            return res.send('Please, fill all fields')
+            return res.render('users/register', {
+                user: req.body,
+                error: 'Por favor, preencha todos os campos',
+            })
         }
     }
     
@@ -15,14 +18,20 @@ async function post(req, res, next){
             
     //Verifica se o password é o mesmo
     if(password != passwordRepeat){
-        return res.send('Password mismatch')
+        return res.render('users/register', {
+            user: req.body,
+            error: 'Senha não confere',
+        })
     }
     
     //Verifica se já existe um usuário
     user = await User.findUser({email, cpf_cnpj})
     
     if(user){
-        return res.send('Users exists')
+        return res.render('users/register', {
+            user: req.body,
+            error: 'Usuário já cadastrado',
+        })
     }
 
     next()

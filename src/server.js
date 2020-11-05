@@ -2,6 +2,7 @@ const express = require('express')
 const nunjucks = require('nunjucks')
 const routes = require('../src/routes')
 const methodOverride = require('method-override')
+const session = require('./app/config/session')
 
 const server = express()
 

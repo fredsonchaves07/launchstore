@@ -38,6 +38,7 @@ module.exports = {
                 cep,
                 address
             ) VALUES ($1, $2, $3, $4, $5, $6)
+            RETURNING id
         `
 
         // Criptografia de senha
@@ -48,7 +49,7 @@ module.exports = {
             data.email,
             passwordHash,
             data.cpf_cnpj.replace(/\D/g, ""),
-            data.cep.replcace(/\D/g, ""),
+            data.cep.replace(/\D/g, ""),
             data.address
         ]
 

@@ -13,7 +13,7 @@ async function post(req, res, next){
         }
     }
     
-    const {email, cpf_cnpj, password, passwordRepeat} = req.body
+    let {email, cpf_cnpj, password, passwordRepeat} = req.body
     cpf_cnpj = cpf_cnpj.replace(/\D/g, "")
             
     //Verifica se o password é o mesmo

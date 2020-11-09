@@ -20,3 +20,10 @@
     background-color: tomato;
     animation: hidemessage 400ms 5s ease-out forwards;
 }
+
+
+.messages .success{
+    background-color: green;
+    animation: hidemessage 400ms 5s ease-out forwards;
+}
+

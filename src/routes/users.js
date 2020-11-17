@@ -5,10 +5,11 @@ const SessionController = require('../app/controllers/SessionController')
 const UserController = require('../app/controllers/UserController')
 
 const UserValidator = require('../app/validators/user')
+const SessionValidator = require('../app/validators/session')
 
 // // login/logout
 routes.get('/login', SessionController.loginForm)
-// routes.post('/login', SessionController.login)
+routes.post('/login',SessionValidator.login, SessionController.login)
 routes.post('/logout', SessionController.logout)
 
 // //reset password /fogot

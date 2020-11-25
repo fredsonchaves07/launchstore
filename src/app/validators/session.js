@@ -27,7 +27,30 @@ async function login(req, res, next){
     next()
 }
 
+async function forgot(req, res, next){
+    const {email} = req.body
+    
+   try {
+       let user = await User.findUser(email)
+
+       
+        if(!user){
+            return render('session/forgot-password', {
+                user: req.body,
+                error: 'Email não cadastrado'
+            })
+        }
+
+        req.user = user
+
+        next()
+
+   } catch (error) {
+       console.error(error)
+   }
+}
 
 module.exports = {
-    login
+    login,
+    forgot
 }

@@ -72,6 +72,16 @@ module.exports = {
     },
 
     reset(req, res){
-        return
+        const {email, password, passwordRepeat, token} = req.body
+
+        try {
+            
+        } catch (error) {
+            console.error(error)
+            
+            return res.render('session/password-reset', {
+                error: 'Erro inesperado, Tente novamente!'
+            })
+        }
     }
 }

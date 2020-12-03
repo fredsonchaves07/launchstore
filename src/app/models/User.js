@@ -2,6 +2,9 @@ const db = require('../config/db')
 const {hash} = require('bcryptjs')
 // Biblioteca utilizada para realizar o encript de senha
 const { has } = require('browser-sync')
+const Product = require('./Product')
+const fs = require('fs')
+
 
 module.exports = {
     async findUser(data){
@@ -67,5 +70,27 @@ module.exports = {
                 query = `${query} ${key} WHERE id = '${id}'`
             }
         })
+    },
+
+    async delete(id){
+        try {
+            let results = await Product.all()
+            const products = results.rows
+
+            const allFilesPromise = products.map(product => Product.files(product.id))
+
+            let promiseResults = await Promise.all(allFilesPromise)
+
+            await db.query('DELETE FROM users WHERE id = $1', [id])
+
+            promiseResults.map(results => {
+                results.rows.map(file => fs.unlinkSync(file.path))
+            })
+
+            
+
+        } catch (error) {
+            console.error(error)
+        }
     }
 }

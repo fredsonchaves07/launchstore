@@ -79,3 +79,18 @@ ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFE
 
 CREATE INDEX "IDX_session_expire" ON "session" ("expire");
 
+-- Efeito cascade
+alter table products 
+drop constraint products_user_id_fkey,
+add constraint products_user_id_fkey
+foreign key ("user_id")
+references users ("id")
+on delete cascade;
+
+alter table files 
+drop constraint files_product_id_fkey,
+add constraint files_product_id_fkey
+foreign key ("product_id")
+references products ("id")
+on delete cascade;
+

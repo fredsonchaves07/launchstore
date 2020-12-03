@@ -27,7 +27,7 @@ module.exports = {
         
         const values = [
             data.category_id,
-            data.user_id || 1,
+            data.user_id,
             data.name,
             data.description,
             data.old_price || data.price,
@@ -52,7 +52,6 @@ module.exports = {
         const query = `
             UPDATE products 
             SET category_id = $1,
-                user_id = $2,
                 name = $3,
                 description = $4,
                 old_price = $5,
@@ -64,7 +63,6 @@ module.exports = {
 
         const values = [
             data.category_id,
-            data.user_id,
             data.name,
             data.description,
             data.old_price,

@@ -34,16 +34,14 @@ const Base = {
     
     async update(id, fields){
         try {
-
-            let query = `UPDATE ${this.table} SET`
+            let update = []
 
             Object.keys(fields).map((key, index, array) => {
-                if((index + 1) < array.length){
-                    query = `${query} ${key} = '${fields[key]}'`
-                } else {
-                    query = `${query} ${key} WHERE id = '${id}'`
-                }
+                const line = `${key} = '${fields[key]}'`
+                update.push(line)
             })
+
+            let query = `UPDATE ${this.table} SET`
             
         } catch (error) {
             console.error(error)

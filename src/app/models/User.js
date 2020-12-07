@@ -4,9 +4,13 @@ const {hash} = require('bcryptjs')
 const { has } = require('browser-sync')
 const Product = require('./Product')
 const fs = require('fs')
+const Base = require('./Base')
 
+Base.init({table: 'users'})
 
 module.exports = {
+    ...Base,
+    
     async findUser(data){
         let email, cpf_cnpj
 
@@ -31,34 +35,34 @@ module.exports = {
         return email || cpf_cnpj
     },
 
-    async create(data){
-        const query = `
-            INSERT INTO users (
-                name,
-                email,
-                password,
-                cpf_cnpj,
-                cep,
-                address
-            ) VALUES ($1, $2, $3, $4, $5, $6)
-            RETURNING id
-        `
+    // async create(data){
+    //     const query = `
+    //         INSERT INTO users (
+    //             name,
+    //             email,
+    //             password,
+    //             cpf_cnpj,
+    //             cep,
+    //             address
+    //         ) VALUES ($1, $2, $3, $4, $5, $6)
+    //         RETURNING id
+    //     `
 
-        // Criptografia de senha
-        const passwordHash = await hash(data.password, 8)
+    //     // Criptografia de senha
+    //     const passwordHash = await hash(data.password, 8)
     
-        const values = [
-            data.name,
-            data.email,
-            passwordHash,
-            data.cpf_cnpj.replace(/\D/g, ""),
-            data.cep.replace(/\D/g, ""),
-            data.address
-        ]
+    //     const values = [
+    //         data.name,
+    //         data.email,
+    //         passwordHash,
+    //         data.cpf_cnpj.replace(/\D/g, ""),
+    //         data.cep.replace(/\D/g, ""),
+    //         data.address
+    //     ]
 
-        const results = await db.query(query, values)
-        return results.rows[0].id
-    },
+    //     const results = await db.query(query, values)
+    //     return results.rows[0].id
+    // },
 
     async update(id, fields){
         let query = 'UPDATE users SET'

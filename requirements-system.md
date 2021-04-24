@@ -1,16 +1,16 @@
-### Usuário
+## Usuário
 
-## Logout
+### Logout
 [] Somente usuário autenticado poderá realizar logout
 [] Deverá ser redirecionado para página principal
 
-## Login
+### Login
 [] Usuário deverá informar um email válido
 [] Usuário deverá informar uma senha válida
 [] Deverá ter link para recuperação de senha
 [] Deverá ter link para cadastro de usuário
 
-## Cadastro
+### Cadastro
 [] Deverá preencher o nome do usuário
 [] Deverá preencher o email válido
 [] Não é possível cadastrar com email já cadastrado no sistema
@@ -21,7 +21,7 @@
 [] Deverá informar o cep da cidade
 [] Deverá informar o endereço completo
 
-## Minha conta
+### Minha conta
 [] Somente usuário autenticado poderá visualizar detalhes de sua conta
 [] Será possível editar o nome do usuário
 [] Será possível possível editar a senha do usuário

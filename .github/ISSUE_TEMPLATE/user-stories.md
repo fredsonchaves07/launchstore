@@ -1,9 +1,7 @@
 ---
 name: User stories
 about: Issue for creating user stories and requirements
-title: ''
 labels: enhancement
-assignees: ''
 
 ---
 

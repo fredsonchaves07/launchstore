@@ -17,4 +17,4 @@ assignees: ''
 
 ## Sprint Ready Checklist
 
-1. [ ]
+- [ ] checklist

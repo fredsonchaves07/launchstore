@@ -1,0 +1,28 @@
+[default]
+EXTENSIONS = [
+    "app.ext.database:init_app"
+]
+MAIL_SERVER = "smtp.mailtrap.io"
+MAIL_PORT = "2525"
+MAIL_USE_TLS = true
+MAIL_USERNAME = "c0ce86e978a7d3"
+MAIL_PASSWORD = "39feb26c850205"
+UPLOAD_FOLDER = "/tmp"
+SEND_MAIL = true
+SQLALCHEMY_TRACK_MODIFICATIONS = false
+CONFIRM_USER_URL="localhost:5000"
+
+[test]
+SECRET_KEY = "test"
+SEND_MAIL = false
+SQLALCHEMY_DATABASE_URI = "sqlite:///test.db"
+
+[development]
+
+
+[production]
+
+
+[docker]
+SECRET_KEY='\xecT\xa4\xd2\xf3\x1a\xf8^k\x9d\xd0}\x01\xa7\xc9\xc5'
+SQLALCHEMY_DATABASE_URI="postgresql://docker:launchstore@database/launchstore_db"

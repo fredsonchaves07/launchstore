@@ -1,0 +1,56 @@
+[tool.poetry]
+name = "launchstore"
+version = "0.1.0"
+description = "sales and purchasing marketplace"
+authors = ["Your Name <you@example.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Flask = "^2.0.2"
+dynaconf = "^3.1.7"
+Flask-SQLAlchemy = "^2.5.1"
+Flask-Migrate = "^3.1.0"
+PyJWT = "^2.3.0"
+Flask-Mail = "^0.9.1"
+psycopg2-binary = "^2.9.3"
+pydantic = "^1.9.0"
+flasgger = "^0.9.5"
+
+[tool.poetry.dev-dependencies]
+setuptools = "^60.5.0"
+black = "^21.12b0"
+pep8 = "^1.7.1"
+autopep8 = "^1.6.0"
+flake8 = "^4.0.1"
+pylint = "^2.12.2"
+pytest = "^6.2.5"
+pytest-flask = "^1.2.0"
+pre-commit = "^2.16.0"
+ipython = "^8.0.0"
+python-dotenv = "^0.19.2"
+flask-shell-ipython = "^0.4.1"
+pytest-cov = "^3.0.0"
+
+[tool.black]
+line-length = 88
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | \.vscode
+  | migrations
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

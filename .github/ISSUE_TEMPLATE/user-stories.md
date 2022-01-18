@@ -5,7 +5,7 @@ labels: enhancement
 
 ---
 
-## User History
+## User Story
 **As a** 
 ..
 
